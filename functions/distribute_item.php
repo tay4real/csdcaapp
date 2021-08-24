@@ -1,4 +1,4 @@
-<?php require_once('../database/db_credentials.php'); ?>
+<?php require_once('../db_credentials.php'); ?>
 <?php
 // check if the form was submitted
 if(isset($_GET['distributeItemSubmitButton'])){
@@ -10,7 +10,7 @@ $item_category = filter_var($_GET['item_category'], FILTER_SANITIZE_STRING);
 $item_quantity = filter_var($_GET['item_quantity'], FILTER_SANITIZE_STRING);
 $quantity_distributed = filter_var($_GET['quantity_distributed'], FILTER_SANITIZE_STRING);
 // make connection to db
-$con = mysqli_connect(DB_SERVER, DB_USER, DB_PASS, DB_NAME);
+$con = mysqli_connect($DB_SERVER, $DB_USER, $DB_PASS, $DB_NAME);
 // check for db connection errors
 if (mysqli_connect_errno()) {
 echo "Failed to connect to MySQL: " . mysqli_connect_error();

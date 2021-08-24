@@ -1,8 +1,8 @@
-<?php require_once('../database/db_credentials.php'); ?>
+<?php require_once('../db_credentials.php'); ?>
 
 <?php
 // make connection to db
-$con = mysqli_connect(DB_SERVER, DB_USER, DB_PASS, DB_NAME);
+$con = mysqli_connect($DB_SERVER, $DB_USER, $DB_PASS, $DB_NAME);
 // check for db connection errors
 if (mysqli_connect_errno()) {
 echo "Failed to connect to MySQL: " . mysqli_connect_error();
