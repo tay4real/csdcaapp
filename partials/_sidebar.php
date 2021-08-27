@@ -35,7 +35,7 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item">
-            <a href="#" class="nav-link active">
+            <a href="/csdcapp" class="nav-link active">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Dashboard
@@ -44,7 +44,7 @@
           </li>
           <li class="nav-header">Operations</li>
           <li class="nav-item">
-            <a href="pages/widgets.html" class="nav-link">
+            <a href="staff_list.php" class="nav-link">
               <i class="nav-icon fas fa-th"></i>
               <p>
                 Staff List
@@ -52,7 +52,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="pages/widgets.html" class="nav-link">
+            <a href="staff_update.php" class="nav-link">
               <i class="nav-icon fas fa-th"></i>
               <p>
                 Update Staff Record

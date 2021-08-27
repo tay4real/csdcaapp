@@ -29,9 +29,8 @@
 <script src="../csdcapp/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 <!-- AdminLTE App -->
 <script src="../csdcapp/dist/js/adminlte.js"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="../csdcapp/dist/js/demo.js"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+
+<!-- AdminLTE dashboard  -->
 <script src="../csdcapp/dist/js/pages/dashboard.js"></script>
 
 
