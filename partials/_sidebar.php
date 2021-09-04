@@ -44,7 +44,7 @@
           </li>
           <li class="nav-header">Operations</li>
           <li class="nav-item">
-            <a href="staff_list.php" class="nav-link">
+            <a href="/csdcapp/staff_list.php" class="nav-link">
               <i class="nav-icon fas fa-th"></i>
               <p>
                 Staff List
@@ -52,10 +52,10 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="staff_update.php" class="nav-link">
+            <a href="new_staff.php" class="nav-link">
               <i class="nav-icon fas fa-th"></i>
               <p>
-                Update Staff Record
+                New Staff Record
               </p>
             </a>
           </li>

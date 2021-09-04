@@ -23,7 +23,7 @@
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="/">Home</a></li>
+              <li class="breadcrumb-item"><a href="/csdcapp">Home</a></li>
               <li class="breadcrumb-item active">Staff List</li>
             </ol>
           </div>
@@ -34,6 +34,11 @@
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
+      <div class="row mb-3">
+        <div class="col-12">
+          <a href="/csdcapp/new_staff.php" class="btn btn-primary float-right">Add New Staff</a>
+        </div>
+      </div>
         <div class="row">
           <div class="col-12">
 
@@ -58,7 +63,17 @@
                   </tr>
                   </thead>
                   <tbody >
-                  
+
+                  </tbody> 
+                  <tfoot>
+                    <th>CS Number</th>
+                    <th>Surname</th>
+                    <th>Firstname</th>
+                    <th>Othername</th>
+                    <th>Gender</th>
+                    <th>Phone Number</th>
+                    <th>Thumbnail</th>   
+                    <th>Action</th>        
                   </tfoot>
                 </table>
                 

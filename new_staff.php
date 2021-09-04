@@ -21,12 +21,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Update Staff Record</h1>
+            <h1>New Staff</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="/csdcapp">Home</a></li>
-              <li class="breadcrumb-item active">Update Staff Record</li>
+              <li class="breadcrumb-item active">New Staff</li>
             </ol>
           </div>
         </div>
@@ -41,7 +41,7 @@
           <div class="col-md-12">
             <div class="card card-default">
               <div class="card-header">
-                <h3 class="card-title">Update Staff Record</h3>
+                <h3 class="card-title">Register New Staff</h3>
               </div>
               <div class="card-body p-3">
                 <div class="bs-stepper">
@@ -521,7 +521,6 @@
     height: 240,
     image_format: 'jpeg',
     jpeg_quality: 90
-
   });
 
 function setup() {
@@ -538,7 +537,7 @@ function take_snapshot() {
 			
 		Webcam.upload( data_uri, $savePHP, function(code, text) {
 			document.getElementById('results').innerHTML = 
-			'<img src="'+data_uri+'" class="img-fluid" />';
+			'<img src="'+data_uri+'" />';
 		} );	
 	} );
 }
