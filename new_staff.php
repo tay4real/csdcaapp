@@ -460,7 +460,8 @@
                       
                       </div>
                       <button class="btn btn-primary" onclick="stepper.previous()">Previous</button>
-                      <button type="submit" class="btn btn-primary">Submit</button>
+      
+                      <input type="submit" name="addStaffSubmitButton" class="btn btn-primary" value="Submit">
                     </div>
                   </div>
                 </div>

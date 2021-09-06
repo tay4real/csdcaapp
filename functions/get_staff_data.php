@@ -1,4 +1,4 @@
-<?php require_once('../db_credentials.php'); ?>
+<?php require_once('../db_connect.php'); ?>
 
 
 <?php
@@ -17,12 +17,6 @@ $sIndexColumn = "id";
 
 /* DB table to use */
 $sTable = "staff_updated";
-
-/* Database connection information */
-$gaSql['user'] = $DB_USER;
-$gaSql['password'] = $DB_PASS;
-$gaSql['db'] = $DB_NAME;
-$gaSql['server'] = $DB_SERVER;
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -43,7 +37,7 @@ die( $sErrorMessage );
 /*
 * MySQL connection
 */
-$gaSql['link'] = mysqli_connect($DB_SERVER, $DB_USER, $DB_PASS, $DB_NAME);
+$gaSql['link'] = mysqli_connect($dbSERVER, $dbUSER, $dbPASS, $dbNAME);
 // check for db connection errors
 if (mysqli_connect_errno()) {
 echo "Failed to connect to MySQL: " . mysqli_connect_error();
@@ -178,7 +172,7 @@ while ( $aRow = mysqli_fetch_array( $rResult ) )
             /* Special output formatting for 'version' column */
             $row[] = ($aRow[ $aColumns[$i] ]=="0") ? '' : '<img  src="'.$aRow[ $aColumns[$i] ].'" alt="profile thumbnail" width="40" />';
         }else if($aColumns[$i] == "cs_no" && $i == 7){
-            $row[] = '<button type="button" name="update" id="'.$aRow[ $aColumns[$i] ].'" class="btn btn-warning btn-xs update">Update</button>';
+            $row[] = '<a href = "staff_update.php?link='. $aRow[ $aColumns[$i] ]. '"><button type="button" name="update" id="'.$aRow[ $aColumns[$i] ].'" class="btn btn-warning btn-xs update">Update</button></a>';
         }
         else if ( $aColumns[$i] != ' ' )
         {
