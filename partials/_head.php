@@ -42,9 +42,4 @@
   <!-- Theme style -->
   <link rel="stylesheet" href="../csdcapp/dist/css/adminlte.min.css">
 
-   <!-- jQuery -->
-   <script src="../csdcapp/plugins/jquery/jquery.min.js"></script>
-  <!-- Webcam -->
-  <script src="../csdcapp/plugins/webcam/webcam.min.js"></script>
-   
 </head>

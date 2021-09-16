@@ -22,4 +22,14 @@ function updateStaff($cs_no,$kia_no,$orin,$photopath,$surname,$firstname,$othern
 			
 }
 
+function customUpdateStaff($col, $val, $cs_no)
+{
+	$con=con();
+	//checking if staff record is available in db
+			
+	return $con->query("UPDATE staff_updated SET $col  ='$val' WHERE cs_no = '$cs_no'");
+	//echo $con->error;
+			
+}
+
 ?>

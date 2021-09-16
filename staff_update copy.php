@@ -4,6 +4,8 @@
 <?php   session_start(); ?>
 <?php include "{$_SERVER['DOCUMENT_ROOT']}/csdcapp/partials/_head.php";?>
 
+
+
 <body class="hold-transition sidebar-mini">
 
 <div class="wrapper">
@@ -13,15 +15,32 @@
 
   <!-- Main Sidebar Container -->
   <?php include "{$_SERVER['DOCUMENT_ROOT']}/csdcapp/partials/_sidebar.php";?> 
-  <?php include "{$_SERVER['DOCUMENT_ROOT']}/csdcapp/functions/utility.php";?> 
 
+  <?php require_once "{$_SERVER['DOCUMENT_ROOT']}/csdcapp/functions/utility.php";?>
+  <?php require_once "{$_SERVER['DOCUMENT_ROOT']}/csdcapp/functions/staff.php";?>
+  <?php require_once "{$_SERVER['DOCUMENT_ROOT']}/csdcapp/functions/update_staff.php";?>
+  <?php  require_once "{$_SERVER['DOCUMENT_ROOT']}/csdcapp/functions/mdas.php";?>
+ 
   <?php
-  if(@validate($_REQUEST['link'])){
-    $cs = $_REQUEST['link'];	
-  }
+  
+    if(@validate($_REQUEST['link'])){
+      $cs = $_REQUEST['link'];	
+     
+      $staff = getStaffbyCriteria( "cs_no", $cs);
+     
+      $imagepath = "./saved_images/$staff[1].jpg";
+     
+    }
 
   ?>
-  
+
+   <!-- jQuery -->
+   <script src="../csdcapp/plugins/jquery/jquery.min.js"></script>
+   <!-- load all mdas -->
+  <script src="../csdcapp/dist/js/components/mda_list.js"></script>
+  <!-- Webcam -->
+  <script src="../csdcapp/plugins/webcam/webcam.min.js"></script>
+
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -103,7 +122,7 @@
                             <div class="col-12 col-sm-4"> 
                                 <div class="form-group">
                                   <label for="cs_no">CS Number</label>
-                                  <input type="text" class="form-control" id="cs_no" name="cs_no"   placeholder="CS Number" readonly >
+                                  <input type="text" class="form-control" id="cs_no" name="cs_no" value="<?php echo $staff[1] ?>"  placeholder="CS Number" readonly >
                                 </div>
                             </div>
   </div>
@@ -111,19 +130,19 @@
                           <div class="col-12 col-md-4"> 
                               <div class="form-group">
                                   <label for="surname">Surname</label>
-                                  <input type="text" class="form-control" id="surname" name="surname"  placeholder="Surname" readonly >
+                                  <input type="text" class="form-control" id="surname" name="surname"  placeholder="Surname" >
                               </div>
                           </div>
                           <div class="col-12 col-md-4">
                             <div class="form-group">
                               <label for="firstname">First Name</label>
-                              <input type="text" class="form-control" id="firstname" name="firstname" placeholder="First Name" readonly >
+                              <input type="text" class="form-control" id="firstname" name="firstname" placeholder="First Name" >
                             </div>
                           </div>
                           <div class="col-12 col-md-4">
                             <div class="form-group">
                               <label for="othername">Other Name</label>
-                              <input type="text" class="form-control" id="othername" name="othername"  placeholder="Other Name" value="" readonly>
+                              <input type="text" class="form-control" id="othername" name="othername"  placeholder="Other Name" value="">
                             </div>
                           </div>
                         </div>
@@ -134,8 +153,8 @@
                                 <label for="sex">Sex</label>
                                 <select id="sex" name="sex" class="form-control custom-select">
                                   <option selected disabled>Select your gender</option>
-                                  <option  value="MALE">MALE</option>
-                                  <option  value="FEMALE">FEMALE</option>
+                                  <option <?php   if(@validate($staff["sex"]) && $staff["sex"] == "MALE" ) echo "selected";?> value="MALE">MALE</option>
+                                  <option <?php  if(@validate($staff["sex"]) && $staff["sex"] == "FEMALE" ) echo "selected";?> value="FEMALE">FEMALE</option>
                                 </select>
                             </div>
                           </div>
@@ -185,7 +204,7 @@
                         </div>
                           
                         
-                        <button type="button" class="btn btn-primary" onclick="stepper.next()">Next</button>
+                        <button class="btn btn-primary" onclick="stepper.next()">Next</button>
                          
                       
                       </div>
@@ -197,7 +216,7 @@
                       <h4>Employment Information</h4>
                    
                         <div class="row">
-                          <div class="col-12 col-md-6"> 
+                          <div class="col-12 col-md-4"> 
                             <div class="form-group">
                                 <label for="parent_mda_code">Parent MDA</label>
                                 <select id="parent_mda_code" name="parent_mda_code" class="form-control custom-select">
@@ -207,7 +226,7 @@
                             </div>
                           </div>
                           
-                          <div class="col-12 col-md-6">
+                          <div class="col-12 col-md-4">
                             <div class="form-group">
                                 <label for="present_mda_code">Present MDA</label>
                                 <select id="present_mda_code" name="present_mda_code" class="form-control custom-select">
@@ -216,27 +235,15 @@
                                 </select>
                             </div>
                           </div>
-                          
-                        </div>
-
-                        <div class="row">
-                       
-                          <div class="col-12 col-md-6">
-                              <div class="form-group">
-                                <label for="salary_pay_point">Salary Pay Point</label>
-                                <select id="salary_pay_point" name="salary_pay_point" class="form-control custom-select">
-                                  <option selected disabled>Salary Pay Point</option>
-                                  
-                                </select>
-                              </div>
-                          </div>
-
-                          <div class="col-12 col-md-6">
+                          <div class="col-12 col-md-4">
                             <div class="form-group">
                                 <label for="present_mda_lga">Present MDA LGA</label>
                                 <select id="present_mda_lga" name="present_mda_lga" class="form-control custom-select">
                                   <option selected disabled>Present MDA</option>
-                                  
+                                  <?php
+
+
+                                    ?>
                                 </select>
                             </div>
                           </div>
@@ -248,7 +255,9 @@
                                 <label for="cadre">Cadre</label>
                                 <select id="cadre" name="cadre" class="form-control custom-select">
                                   <option selected disabled>Select Cadre</option>
-                                 
+                                  <?php
+
+                                  ?>
                                 </select>
                             </div>
                           </div>
@@ -257,46 +266,61 @@
                                 <label for="level">Level</label>
                                 <select id="level" name="level" class="form-control custom-select">
                                   <option selected disabled>Select Level</option>
-                                 
+                                  <?php
+
+                                  ?>
                                 </select>
                             </div>
                           </div>
-                          <div class="col-12 col-md-4"> 
-                                <div class="form-group">
-                                  <label for="designation">Present Post</label>
-                                  <input type="text" class="form-control" id="designation" name="designation" placeholder="Present Post" value="" readonly>
-                                </div>
+                          <div class="col-12 col-md-4">
+                            <div class="form-group">
+                                <label for="step">Step</label>
+                                <select id="step" name="step" class="form-control custom-select">
+                                  <option selected disabled>Select Step</option>
+                                  <?php
+
+                                  ?>
+                                </select>
+                            </div>
                           </div>
                         </div>
                       
                       
                         
                         <div class="row mb-3">
+                            <div class="col-12 col-md-3"> 
+                                <div class="form-group">
+                                  <label for="designation">Present Post</label>
+                                  <input type="text" class="form-control" id="designation" name="designation" placeholder="Present Post" value="">
+                                </div>
+                            </div>
                             
-                            
-                            <div class="col-12 col-md-4">
+                            <div class="col-12 col-md-3">
                               <div class="form-group">
                                   <label for="dfa">Date of First Appointment</label>
                                   <input type="date" class="form-control" id="dfa" name="dfa" placeholder="Date of First Appointment" value="">
                               </div>
                             </div>
-                            <div class="col-12 col-md-4">
+                            <div class="col-12 col-md-3">
                               <div class="form-group">
                                   <label for="dpa">Date of Present Appointment</label>
                                   <input type="date" class="form-control" id="dpa" name="dpa" placeholder="Date of Present Appointment" value="">
                               </div>
                             </div>
+                            <div class="col-12 col-md-3">
+                              <div class="form-group">
+                                <label for="salary_pay_point">Salary Pay Point</label>
+                                <select id="salary_pay_point" name="salary_pay_point" class="form-control custom-select">
+                                  <option selected disabled>Salary Pay Point</option>
+                                  <?php
 
-                            <div class="col-12 col-md-4"> 
-                                <div class="form-group">
-                                  <label for="designation">Date of Retirement</label>
-                                  <input type="date" class="form-control" id="retirement_date" name="retirement_date" placeholder="Date of Present Appointment" value="" readonly>
-                                </div>
-                          </div>
-                           
+                                  ?>
+                                </select>
+                              </div>
+                            </div>
                         </div>
-                        <button type="button" class="btn btn-primary" onclick="stepper.previous()">Previous</button>
-                        <button type="button" class="btn btn-primary" onclick="stepper.next()">Next</button>
+                        <button class="btn btn-primary" onclick="stepper.previous()">Previous</button>
+                        <button class="btn btn-primary" onclick="stepper.next()">Next</button>
                       </div>
                       <div id="bankinfo" class="content" role="tabpanel" aria-labelledby="bankinfo-trigger">
                         <h4>Salary Bank Information</h4>
@@ -306,7 +330,9 @@
                                 <label for="bank_name">Bank Name</label>
                                 <select id="bank_name" name="bank_name" class="form-control custom-select">
                                   <option selected disabled>Select Bank</option>
-                                 
+                                  <?php
+
+                                  ?>
                                 </select>
                               </div>
                               
@@ -326,8 +352,8 @@
                                 </div>
                             </div>
                         </div>
-                        <button type="button" class="btn btn-primary" onclick="stepper.previous()">Previous</button>
-                        <button type="button" class="btn btn-primary" onclick="stepper.next()">Next</button>
+                        <button class="btn btn-primary" onclick="stepper.previous()">Previous</button>
+                        <button class="btn btn-primary" onclick="stepper.next()">Next</button>
                       </div>
 
 
@@ -398,8 +424,8 @@
                             </div>
                           </div>
                       </div>
-                        <button type="button" class="btn btn-primary" onclick="stepper.previous()">Previous</button>
-                        <button type="button" class="btn btn-primary" onclick="stepper.next()">Next</button>
+                        <button class="btn btn-primary" onclick="stepper.previous()">Previous</button>
+                        <button class="btn btn-primary" onclick="stepper.next()">Next</button>
                       </div>
 
                       <div id="capture" class="content" role="tabpanel" aria-labelledby="capture-trigger">
@@ -457,7 +483,7 @@
                           </div>
                         
                         </div>
-                        <button type="button" class="btn btn-primary" onclick="stepper.previous()">Previous</button>
+                        <button class="btn btn-primary" onclick="stepper.previous()">Previous</button>
                         <button type="submit" class="btn btn-primary">Submit</button>
                       </div>
                     </div>
@@ -481,8 +507,6 @@
 </div>
 <!-- ./wrapper -->
 
- <!-- jQuery -->
- <script src="../csdcapp/plugins/jquery/jquery.min.js"></script>
 
 <!-- Bootstrap 4 -->
 <script src="../csdcapp/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -508,139 +532,134 @@
 <!-- AdminLTE App -->
 <script src="../csdcapp/dist/js/adminlte.min.js"></script>
 
-<!-- load components -->
-<script src="../csdcapp/dist/js/components/mda_list.js"></script>
-<script src="../csdcapp/dist/js/components/lga_list.js"></script>
-<script src="../csdcapp/dist/js/components/cadres.js"></script>
-<script src="../csdcapp/dist/js/components/gradeLevels.js"></script>
-<script src="../csdcapp/dist/js/components/banks.js"></script>
 
-
-<script type="text/javascript">
-$(document).ready(function(){
-
-  var cs_no = '<?php echo  $cs  ?>'
+<script>
+    let inputCsNo = document.getElementById("cs_no");
+    let inputSurname = document.getElementById("surname");
+    let inputFirstname = document.getElementById("firstname");
+    let inputOthername = document.getElementById("othername");
+    let inputSex = document.getElementById("sex");
+    let inputDateOfBirth = document.getElementById("dob");
+    let inputEmail = document.getElementById("email");
+    let inputPhone = document.getElementById("phone");
+    let inputNokFullname = document.getElementById("nok_fullname");
+    let inputNokPhone = document.getElementById("nok_phone");
+    let inputNokAddress = document.getElementById("nok_address");
+    let inputPresentMdaLga = document.getElementById("present_mda_lga");
+    let inputPresentMdaCode = document.getElementById("present_mda_code");
+    let inputCadre = document.getElementById("cadre");
+    let inputLevel = document.getElementById("level");
+    let inputStep = document.getElementById("step");
+    let inputPresentPost = document.getElementById("designation");
+    let inputDateOfFirstAppointment = document.getElementById("dfa");
+    let inputDateOfPresentAppointment = document.getElementById("dpa");
+    let inputSalaryPayPoint = document.getElementById("salary_pay_point");
+    let inputBankName = document.getElementById("bank_name");
+    let inputAccountName = document.getElementById("account_name");
+    let inputAccountNo = document.getElementById("account_no");
+    let inputQualificationCategory = document.getElementById("qualification_category");
+    let inputQualificationInfo = document.getElementById("qualification_info");
+    let inputImagePath = document.getElementById("results");
   
-    $.ajax({
-      url: "http://localhost/csdcapp/functions/get_staff_data.php",
-        type: 'post',
-        data: {csn : cs_no},
-        dataType: 'json',
-        success:function(res){
-         
-          console.log(res)
-          let inputCsNo = document.getElementById("cs_no");
-          let inputSurname = document.getElementById("surname");
-          let inputFirstname = document.getElementById("firstname");
-          let inputOthername = document.getElementById("othername");
-          let inputSex = document.getElementById("sex");
-          let inputDateOfBirth = document.getElementById("dob");
-          let inputEmail = document.getElementById("email");
-          let inputPhone = document.getElementById("phone");
-          let inputNokFullname = document.getElementById("nok_fullname");
-          let inputNokPhone = document.getElementById("nok_phone");
-          let inputNokAddress = document.getElementById("nok_address");
-          let inputPresentMdaLga = document.getElementById("present_mda_lga");
-          let inputParentMdaCode = document.getElementById("parent_mda_code");
-          let inputPresentMdaCode = document.getElementById("present_mda_code");
-          let inputCadre = document.getElementById("cadre");
-          let inputLevel = document.getElementById("level");
-          let inputPresentPost = document.getElementById("designation");
-          let inputDateOfFirstAppointment = document.getElementById("dfa");
-          let inputDateOfPresentAppointment = document.getElementById("dpa");
-          let RetirementDate = document.getElementById("retirement_date");
-          let inputSalaryPayPoint = document.getElementById("salary_pay_point");
-          let inputBankName = document.getElementById("bank_name");
-          let inputAccountName = document.getElementById("account_name");
-          let inputAccountNo = document.getElementById("account_no");
-          let inputQualificationCategory = document.getElementById("qualification_category");
-          let inputQualificationInfo = document.getElementById("qualification_info");
-          let inputImagePath = document.getElementById("results");
-          
 
-        function isValidTimestamp(_timestamp) {
-            const newTimestamp = new Date(_timestamp).getTime();
-            return isNumeric(newTimestamp);
-        }
 
-        function isNumeric(n) {
-            return !isNaN(parseFloat(n)) && isFinite(n);
-        }
-        
-           // process data from db
-           var dob = "";
-            let dobStr = res.dob_y+"-"+ res.dob_m + "-" + res.dob_d;
-            if(isValidTimestamp(dobStr)){
-              dob = new Date(dobStr).toISOString()
-        .substring(0, 10);
-            }
+    // record from db
+    let cs_no = '<?php echo  $staff["cs_no"];  ?>'
+    let surname = '<?php echo  $staff["surname"];  ?>'
+    let firstname = '<?php echo  $staff["firstname"];  ?>'
+    let othername = '<?php echo  $staff["othername"];  ?>'
+    let sex = '<?php echo  $staff["sex"];  ?>'
+    let day = '<?php echo  $staff["dob_d"];  ?>'
+    let month = '<?php echo  $staff["dob_m"];  ?>'
+    let year = '<?php echo  $staff["dob_y"];  ?>'
+    let email = '<?php echo  $staff["email"];  ?>'
+    let phone = '<?php echo  $staff["phone"];  ?>'
+    let nok_fullname = '<?php echo  $staff["nok_fullname"];  ?>'
+    let nok_phone = '<?php echo  $staff["nok_phone"];  ?>'
+    let nok_address = '<?php echo  $staff["nok_address"];  ?>'
+    let present_mda_lga = '<?php echo  $staff["present_mda_lga"];  ?>'
+    let present_mda_code = '<?php echo  $staff["present_mda_code"];  ?>'
+    let parent_mda_code = '<?php echo  $staff["parent_mda_code"];  ?>'
+    let cadre = '<?php echo  $staff["cadre"];  ?>'
+    let level = '<?php echo  $staff["level"];  ?>'
+    let step = '<?php echo  $staff["step"];  ?>'
+    let designation = '<?php echo  $staff["designation"];  ?>'
+    let dfa = '<?php echo  $staff["dfa"];  ?>'
+    let mfa = '<?php echo  $staff["mfa"];  ?>'
+    let yfa = '<?php echo  $staff["yfa"];  ?>'
+    let dpa = '<?php echo  $staff["dpa"];  ?>'
+    let mpa = '<?php echo  $staff["mpa"];  ?>'
+    let ypa = '<?php echo  $staff["ypa"];  ?>'
+    let salary_pay_point = '<?php echo  $staff["salary_pay_point"];  ?>'
+    let bank_name = '<?php echo  $staff["bank_name"];  ?>'
+    let account_name = '<?php echo  $staff["account_name"];  ?>'
+    let account_no = '<?php echo  $staff["account_no"];  ?>'
+    let pry_certificate = '<?php echo  $staff["pry_certificate"];  ?>'
+    let jss3_certificate = '<?php echo  $staff["jss3_certificate"];  ?>'
+    let sss_certificates = '<?php echo  $staff["sss_certificates"];  ?>'
+    let tertiary_certificates = '<?php echo  $staff["tertiary_certificates"];  ?>'
+    let pg_certificates = '<?php echo  $staff["pg_certificates"];  ?>'
+    let doctoral_certificates = '<?php echo  $staff["doctoral_certificates"];  ?>'
+    let prof_qual_international = '<?php echo  $staff["prof_qual_international"];  ?>'
+    let prof_qual_national = '<?php echo  $staff["prof_qual_national"];  ?>'
+    let prof_qual_achievement = '<?php echo  $staff["prof_qual_achievement"];  ?>'
+    let prof_qual_others = '<?php echo  $staff["prof_qual_others"];  ?>'
+    let prof_mem_international = '<?php echo  $staff["prof_mem_international"];  ?>'
+    let prof_mem_national = '<?php echo  $staff["prof_mem_national"];  ?>'
+    let prof_mem_others = '<?php echo  $staff["prof_mem_others"];  ?>'
+    let imagePath = '<?php echo  $staff["photopath"];  ?>'
+   
+   
 
-            var dateFirstAppointment
-            let strDateFirstAppointment = res.yfa + "-" + res.mfa + "-" + res.dfa;
-            if(isValidTimestamp(strDateFirstAppointment)){
-             dateFirstAppointment = new Date(strDateFirstAppointment).toISOString()
-        .substring(0, 10);
-            }
-            
-            var datePresentAppointment = "";
-            let strDatePresentAppointment = res.ypa + "-" + res.mpa + "-" + res.dpa;
-            if(isValidTimestamp(strDatePresentAppointment)){
-              datePresentAppointment = new Date(strDatePresentAppointment).toISOString()
-        .substring(0, 10);
-            }
-           
 
-        var dateOfRetirement = "";
-        if(res.retirement_year !== 0 && res.retirement_month !== 0 && res.retirement_date !== 0){
-          let strRetirementDate = res.retirement_year + "-" + res.retirement_month + "-" + res.retirement_day;
+  
+    // process data from db
+    let dobStr = year+"-"+month + "-" + day;
+    let dob = new Date(dobStr).toISOString()
+.substring(0, 10);
 
-          if(isValidTimestamp(strRetirementDate)){
-            dateOfRetirement = new Date(strRetirementDate).toISOString()
-        .substring(0, 10);
-          }else{
-            dateOfRetirement = "";
-          }
-            
-        }
-        
+    let strDateFirstAppointment = yfa+"-"+mfa + "-" + dfa;
+    let dateFirstAppointment = new Date(strDateFirstAppointment).toISOString()
+.substring(0, 10);
+
+    let strDatePresentAppointment = ypa+"-"+mpa + "-" + dpa;
+    let datePresentAppointment = new Date(strDatePresentAppointment).toISOString()
+.substring(0, 10);
     
-            // updating form record with data
-            inputCsNo.value = res.cs_no;
-            inputSurname.value = res.surname;
-            inputFirstname.value = res.firstname;
-            inputOthername.value = res.othername;
-            inputSex.value = res.sex;
-            inputDateOfBirth.value = dob;
-            inputEmail.value = res.email;
-            inputPhone.value = res.phone;
-            inputNokFullname.value = res.nok_fullname;
-            inputNokPhone.value = res.nok_phone;
-            inputNokAddress.value = res.nok_address;
-            inputPresentMdaLga.value = res.present_mda_lga;
-            inputParentMdaCode.value = res.parent_mda_code;
-            inputPresentMdaCode.value = res.present_mda_code;
-            inputCadre.value = res.cadre;
-            inputLevel.value = res.level;
-            inputPresentPost.value = res.designation;
-            inputDateOfFirstAppointment.value = dateFirstAppointment;
-            inputDateOfPresentAppointment.value = datePresentAppointment;
-            RetirementDate.value = dateOfRetirement;
-            inputSalaryPayPoint.value = res.salary_pay_point;
-            inputBankName.value = res.bank_name;
-            inputAccountName.value = res.account_name;
-            inputAccountNo.value = res.account_no;
 
-            inputImagePath.innerHTML = 
-              '<img src="' + res.photopath + '" class="img-fluid" />';
-      },
-      error: function (res) {},
-    });
-});
-</script>
+    // updating form record with data
+    inputCsNo.value = cs_no;
+    inputSurname.value = surname;
+    inputFirstname.value = firstname;
+    inputOthername.value = othername;
+    inputSex.value = sex;
+    inputDateOfBirth.value = dob;
+    inputEmail.value = email;
+    inputPhone.value = phone;
+    inputNokFullname.value = nok_fullname;
+    inputNokPhone.value = nok_phone;
+    inputNokAddress.value = nok_address;
+    inputPresentMdaLga.value = present_mda_lga;
+    inputPresentMdaCode.value = present_mda_code;
+    inputCadre.value = cadre;
+    inputLevel.value = level;
+    inputStep.value = step;
+    inputPresentPost.value = designation;
+    inputDateOfFirstAppointment.value = dateFirstAppointment;
+    inputDateOfPresentAppointment.value = datePresentAppointment;
+    inputSalaryPayPoint.value = salary_pay_point;
+    inputBankName.value = bank_name;
+    inputAccountName.value = account_name;
+    inputAccountNo.value = account_no;
 
+    inputImagePath.innerHTML = 
+			'<img src="./saved_images/' + cs_no + '.jpg" class="img-fluid" />';
+
+  
+
+  </script>
+ 
 <!-- Webcam -->
-<script src="../csdcapp/plugins/webcam/webcam.min.js"></script>
-
 <script src="../csdcapp/dist/js/components/webcam.js"></script>
 
 <script>

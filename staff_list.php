@@ -59,7 +59,8 @@
                     <th>Gender</th>
                     <th>Phone Number</th>
                     <th>Thumbnail</th>   
-                    <th>Action</th>               
+                    <th>Action</th> 
+                                
                   </tr>
                   </thead>
                   <tbody >
@@ -73,7 +74,8 @@
                     <th>Gender</th>
                     <th>Phone Number</th>
                     <th>Thumbnail</th>   
-                    <th>Action</th>        
+                    <th>Action</th> 
+                        
                   </tfoot>
                 </table>
                 
@@ -97,6 +99,7 @@
 
 <!-- jQuery -->
 <script src="../csdcapp/plugins/jquery/jquery.min.js"></script>
+
 <!-- Bootstrap 4 -->
 <script src="../csdcapp/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- DataTables  & Plugins -->
@@ -114,7 +117,7 @@
 <script src="../csdcapp/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 <!-- AdminLTE App -->
 <script src="../csdcapp/dist/js/adminlte.min.js"></script>
-<!-- AdminLTE for demo purposes -->
+<!-- staff list -->
 <script src="../csdcapp/dist/js/pages/staff_list.js"></script>
 
 </body>
