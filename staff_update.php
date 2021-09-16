@@ -63,9 +63,7 @@
                           <span class="bs-stepper-label d-none d-md-block">Bio Data & NOK Info</span>
                         </button>
                       </div>
-                      
-                    
-                      
+                                           
                       <div class="step" data-target="#empinfo">
                         <button type="button" class="step-trigger" role="tab" aria-controls="empinfo" id="empinfo-trigger">
                           <span class="bs-stepper-circle">2</span>
@@ -142,7 +140,7 @@
                           <div class="col-12 col-md-6">
                             <div class="form-group">
                               <label for="dob">Date of Birth</label>
-                              <input type="date" class="form-control" id="dob" name="dob" value="date"   placeholder="Date of Birth" >
+                              <input type="date" class="form-control" id="dob" name="dob"   placeholder="Date of Birth" >
                             </div>
                           </div>
                         </div>
@@ -339,12 +337,11 @@
                                 <label for="qualification_category">Qualification Category</label>
                                 <select id="qualification_category" name="qualification_category" class="form-control custom-select">
                                   <option selected disabled>Choose Category</option>
-                                  <option value="pry_certificate">Primary School Certificate</option>
-                                  <option value="jss3_certificate">Junior Secondary Certificate</option>
-                                  <option value="sss_certificates">Senior Secondary Certificate</option>
-                                  <option value="tertiary_certificates">Graduate Certificate</option>
+                                  <option value="pry_certificate">Primary School Leaving Certificate</option>
+                                  <option value="jss3_certificate">Junior Secondary School Certificate</option>
+                                  <option value="sss_certificates">Senior Secondary School Certificate</option>
+                                  <option value="tertiary_certificates">Undergraduate Certificate</option>
                                   <option value="pg_certificates">Post Graduate Certificate</option>
-                                  <option value="doctoral_certificates">Doctorate Certificate</option>
                                   <option value="prof_qual_international">Professional Certification</option>
                                   <option value="prof_mem_international">Professional Membership</option>
                                   <option value="prof_qual_others">Artisan Certification</option>
@@ -354,12 +351,13 @@
                         </div>
                         <div class="col-12 col-md-5">
                         <div class="form-group">
-                                  <label for="qualification_info">Oualification Obtained - Year Obtained</label>
-                                  <input type="text" class="form-control" id="qualification_info" name="qualification_info" placeholder="e.g PSLC - 1992" >
+                                  <label for="qualification_info">Qualification Obtained - Year Obtained</label>
+                                  <input type="text" class="form-control" id="qualification_info" name="qualification_info" placeholder="Qualification Obtained - Year Obtained" >
+                                  <span class="text-muted" id="qual_info_desc"></span>
                                 </div>
                         </div>
                         <div class="col col-md-2  d-flex align-items-end mb-3">    
-                            <button onClick="" class="btn btn-primary">Add New</button>
+                            <button type="button" onClick="" class="btn btn-primary">Add New</button>
                         </div>
                       </div>
                       <div class="row">
@@ -370,7 +368,7 @@
                               </div>
                               <!-- /.card-header -->
                               <div class="card-body  table-responsive p-0">
-                                <table class="table table-sm">
+                                <table id="qualification_list" class="table table-sm">
                                   <thead>
                                     <tr>
                                       <th style="width: 10px">#</th>
@@ -380,16 +378,8 @@
                                       <th style="width: 40px">Remove</th>
                                     </tr>
                                   </thead>
-                                  <tbody>
-                                    <tr>
-                                      <td>1.</td>
-                                      <td>Post Graduate Certificate</td>
-                                      <td>
-                                        MTech. Computer Science - 2019
-                                      </td>
-                                      <td><span class="badge bg-info">Edit</span></td>
-                                      <td><span class="badge bg-danger">Delete</span></td>
-                                    </tr>
+                                  <tbody id="qualification_list_body">
+                                   
                                   
                                   </tbody>
                                 </table>
@@ -553,9 +543,15 @@ $(document).ready(function(){
           let inputBankName = document.getElementById("bank_name");
           let inputAccountName = document.getElementById("account_name");
           let inputAccountNo = document.getElementById("account_no");
-          let inputQualificationCategory = document.getElementById("qualification_category");
-          let inputQualificationInfo = document.getElementById("qualification_info");
           let inputImagePath = document.getElementById("results");
+          let inputQualificationCategory = document.getElementById("qualification_category");
+          let qualificationInfoDesc = document.getElementById("qual_info_desc");
+          
+          
+
+
+
+          
           
 
         function isValidTimestamp(_timestamp) {
@@ -632,6 +628,195 @@ $(document).ready(function(){
 
             inputImagePath.innerHTML = 
               '<img src="' + res.photopath + '" class="img-fluid" />';
+
+
+            // Educational Qualifications
+            // Show Description 
+            $("#qualification_category").change(function(){
+              var category = $(this).val();
+              console.log(category);
+              if(category === "pry_certificate" ){
+                
+                qualificationInfoDesc.innerHTML = "<i><small>e.g PSLC - 1992</small></i>"
+              }else if(category === "jss3_certificate" ){
+                qualificationInfoDesc.innerHTML = "<i><small>e.g JSSC - 1995</small></i>"
+              }if(category === "sss_certificates" ){
+                qualificationInfoDesc.innerHTML = "<i><small>e.g SSLC - 1992</small></i>"
+              }if(category === "tertiary_certificates" ){
+                qualificationInfoDesc.innerHTML = "<i><small>e.g BSc. Computer Engineering - 2003</small></i>"
+              }if(category === "pg_certificates" ){
+                qualificationInfoDesc.innerHTML = "<i><small>Use comma or colon seperator e.g MTech. Computer Science - 2012; PhD. Cyber Sercurity - 2020</small></i>"
+              }if(category === "prof_qual_international" ){
+                qualificationInfoDesc.innerHTML = "<i><small>Certification issuing_authority - year e.g Registered Engineer Coren - 2019</small></i>"
+              }if(category === "prof_mem_international" ){
+                qualificationInfoDesc.innerHTML = "<i><small>Membership body - Membership numbere.g NCS - 625762</small></i>"
+              }
+              if(category === "prof_qual_others" ){
+                qualificationInfoDesc.innerHTML = "<i><small>Certificate Obtained - Year Obtained e.g Certificate of Completion Fashion Design - 2019</small></i>"
+              }
+              if(category === "prof_mem_others" ){
+                qualificationInfoDesc.innerHTML = "<i><small>Membership body - Membership Number</small></i>"
+              }
+            })
+
+            
+           
+
+
+
+            let pry = res.pry_certificate;
+            let jss3 = res.jss3_certificate;
+            let sss = res.sss_certificates;
+            let tertiary = res.tertiary_certificates;
+            let pg = res.pg_certificates;
+            let doctoral = res.doctoral_certificates;
+            let prof_qual_int = res.prof_qual_international;
+            let prof_qual_nat = res.prof_qual_national;
+            let prof_mem_int = res.prof_mem_international;
+            let prof_mem_nat = res.prof_mem_national;
+            let artisan_certificate = res.prof_qual_others;
+            let artisan_membership = res.prof_mem_others;
+
+            const qualifications = [];
+
+            // add Primary School Certificates
+            if(pry !== 'NA' || pry !== ''){
+
+              qualifications.push({
+                  category: "Primary School Certificate",
+                  qualification_obtained: pry
+                })
+
+              // // search if string contains multiple qualifications
+              // if(pry.includes(',')){
+              //   let pry_qualifications = pry.split(",")
+
+              //   pry_qualifications.map(qual => {
+              //     qualifications.push({
+              //       category: "Primary School Certificate",
+              //       qualification_obtained: qual
+              //     })
+              //   })
+
+              // }else{
+              //   qualifications.push({
+              //     category: "Primary School Certificate",
+              //     qualification_obtained: pry
+              //   })
+              // }
+            }
+
+            // add Junior Secondary Certificate
+            if(jss3 !== 'NA' || jss3 !== ''){
+
+              qualifications.push({
+                  category: "Junior Secondary Certificate",
+                  qualification_obtained: jss3
+                })
+
+              
+            }
+            
+            
+            // add Senior Secondary Certificate
+            if(sss !== 'NA' || sss !== ''){
+              qualifications.push({
+                  category: "Secondary Secondary Certificate",
+                  qualification_obtained: sss
+                })
+              
+            }
+
+            // add Undergraduate Certificate
+            if(tertiary.toString() !== 'NA' || tertiary.toString() !== ''){
+              
+                qualifications.push({
+                  category: "Undergraduate Certificate",
+                  qualification_obtained: tertiary
+                })
+             
+            }
+
+
+            // add post graduate Certificate
+            if(pg.toString() !== 'NA' || pg.toString() !== '' ){
+
+              qualifications.push({
+                  category: "Graduate Certificate",
+                  qualification_obtained: pg
+                })
+             
+            }
+
+            // add post graduate Certificate
+            if(doctoral !== 'NA' || doctoral !== '' ){
+
+                qualifications.push({
+                  category: "Graduate Certificate",
+                  qualification_obtained: doctoral
+                })
+              
+            }
+
+            // add Professional Certification
+            if(prof_qual_int !== 'NA' || prof_qual_int !== '' ){
+                qualifications.push({
+                  category: "Professional Certification",
+                  qualification_obtained: prof_qual_int
+                })
+            }
+
+            // add Professional Certification
+            if(prof_qual_nat !== 'NA' || prof_qual_nat !== '' ){
+                qualifications.push({
+                  category: "Professional Certification",
+                  qualification_obtained: prof_qual_nat
+                })
+            }
+
+
+             // add Professional Membership
+             if(prof_mem_int !== 'NA' || prof_mem_int !== '' ){
+                qualifications.push({
+                  category: "Professional Certification",
+                  qualification_obtained: prof_mem_int
+                })
+            }
+
+
+            // add Professional Membership
+            if(prof_mem_nat !== 'NA' || prof_mem_nat !== '' ){
+                qualifications.push({
+                  category: "Professional Certification",
+                  qualification_obtained: prof_mem_nat
+                })
+            }
+
+            // add Artisan Certificate
+            if(artisan_certificate !== 'NA' || artisan_certificate !== '' ){
+                qualifications.push({
+                  category: "Artisan Certification",
+                  qualification_obtained: artisan_certificate
+                })
+            }
+
+            // add Artisan Membership
+            if(artisan_membership !== 'NA' || artisan_membership !== '' ){
+                qualifications.push({
+                  category: "Artisan Certification",
+                  qualification_obtained: artisan_membership
+                })
+            }
+
+
+            qualifications.map((qual, key) => {
+              if(qual.qualification_obtained !== 'NA'){
+                $("table tbody").append(`<tr><td>#</td><td>${qual.category}</td><td>${qual.qualification_obtained}</td><td><span class='badge bg-info'>Edit</span></td><td><span class='badge bg-danger'>Delete</span></td></tr>`)
+              }    
+            })
+
+            console.log(qualifications);
+            
       },
       error: function (res) {},
     });
