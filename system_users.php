@@ -12,7 +12,11 @@ if(isset($_SESSION["userdata"]))
     $email = $user->email;
     $phone = $user->phone;
     $status = $user->status;
-   
+    if($role == "admin"){
+
+    }else{
+      header("location: /csdcapp");
+    }
 }else{
   header("location: /csdcapp/login.php");
 }
@@ -42,12 +46,12 @@ if(isset($_SESSION["userdata"]))
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Staff List</h1>
+            <h1>System Users</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="/csdcapp">Home</a></li>
-              <li class="breadcrumb-item active">Staff List</li>
+              <li class="breadcrumb-item active">System Users</li>
             </ol>
           </div>
         </div>
@@ -59,7 +63,7 @@ if(isset($_SESSION["userdata"]))
       <div class="container-fluid">
       <div class="row mb-3">
         <div class="col-12">
-          <a href="/csdcapp/new_staff.php" class="btn btn-primary float-right">Add New Staff</a>
+          <a href="/csdcapp/new_user.php" class="btn btn-primary float-right">Add New User</a>
         </div>
       </div>
         <div class="row">
@@ -72,33 +76,30 @@ if(isset($_SESSION["userdata"]))
               <!-- /.card-header -->
               <div class="card-body">
           
-                <table id="example1" class="table table-bordered table-striped">
+                <table id="example2" class="table table-bordered table-striped">
                   <thead>
                   <tr>
-                    <th>CS Number</th>
-                    <th>Surname</th>
-                    <th>Firstname</th>
-                    <th>Othername</th>
-                    <th>Gender</th>
-                    <th>Phone Number</th>
-                    <th>Thumbnail</th>   
+                    <th>#</th>
+                    <th>Fullname</th>
+                    <th>Username</th>   
+                    <th>Phone</th>
+                    <th>Role</th>
+                    <th>Status</th> 
                     <th>Action</th> 
-                                
+                    
                   </tr>
                   </thead>
                   <tbody >
 
                   </tbody> 
                   <tfoot>
-                    <th>CS Number</th>
-                    <th>Surname</th>
-                    <th>Firstname</th>
-                    <th>Othername</th>
-                    <th>Gender</th>
-                    <th>Phone Number</th>
-                    <th>Thumbnail</th>   
+                    <th>#</th>
+                    <th>Fullname</th>
+                    <th>Username</th>
+                    <th>Phone</th>
+                    <th>Role</th>
+                    <th>Status</th> 
                     <th>Action</th> 
-                        
                   </tfoot>
                 </table>
                 
@@ -141,7 +142,7 @@ if(isset($_SESSION["userdata"]))
 <!-- AdminLTE App -->
 <script src="../csdcapp/dist/js/adminlte.min.js"></script>
 <!-- staff list -->
-<script src="http://localhost/apiservice/pages/staff_list.js"></script>
+<script src="http://localhost/apiservice/pages/users_list.js"></script>
 
 </body>
 </html>

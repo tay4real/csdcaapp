@@ -1,6 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <!-- head -->
+<?php session_start(); 
+
+if(isset($_SESSION["userdata"]))
+{
+	  $user = $_SESSION["userdata"];
+    $cs_no = $user->username;
+    $role = $user->role;
+    $fullname = $user->fullname;
+    $sex = $user->sex;
+    $email = $user->email;
+    $phone = $user->phone;
+    $status = $user->status;
+    if($role == "admin"){
+
+    }else{
+      header("location: /csdcapp");
+    }
+}else{
+  header("location: /csdcapp/login.php");
+}
+?>
 <?php include "{$_SERVER['DOCUMENT_ROOT']}/csdcapp/partials/_head.php";?>
 
 <body class="hold-transition sidebar-mini">
@@ -11,7 +32,13 @@
   <!-- /.navbar -->
 
   <!-- Main Sidebar Container -->
-  <?php include "{$_SERVER['DOCUMENT_ROOT']}/csdcapp/partials/_sidebar.php";?>
+  <?php 
+    if($role == "admin"){
+      include "{$_SERVER['DOCUMENT_ROOT']}/csdcapp/partials/_admin_sidebar.php";
+    }else if($role == "user"){
+      include "{$_SERVER['DOCUMENT_ROOT']}/csdcapp/partials/_sidebar.php";
+    }
+  ?>
 
 
   <!-- Content Wrapper. Contains page content -->
@@ -26,6 +53,7 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="/csdcapp">Home</a></li>
+              <li class="breadcrumb-item"><a href="/csdcapp/staff_list.php">Staff List</a></li>
               <li class="breadcrumb-item active">New Staff</li>
             </ol>
           </div>
@@ -515,34 +543,6 @@
   })
 </script>
 
-
-<script language="JavaScript">
-  Webcam.set({
-    width: 320,
-    height: 240,
-    image_format: 'jpeg',
-    jpeg_quality: 90
-  });
-
-function setup() {
-	Webcam.reset();
-	Webcam.attach( '#my_camera' );
-}
-
-function take_snapshot() {
-	// take snapshot and get image data
-	
-	Webcam.snap( function(data_uri) {
-		// display results in page
-		$savePHP = '../csdcapp/functions/saveimage.php' + '?cs_no=' + document.getElementById('cs_no').value;
-			
-		Webcam.upload( data_uri, $savePHP, function(code, text) {
-			document.getElementById('results').innerHTML = 
-			'<img src="'+data_uri+'" />';
-		} );	
-	} );
-}
-
-</script>
+<script src="http://localhost/apiservice/dist/js/components/webcam.js"></script>
 </body>
 </html>

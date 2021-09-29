@@ -1,7 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <!-- head -->
-<?php   session_start(); ?>
+<?php session_start(); 
+
+if(isset($_SESSION["userdata"]))
+{
+	  $user = $_SESSION["userdata"];
+    $cs_no = $user->username;
+    $role = $user->role;
+    $fullname = $user->fullname;
+    $sex = $user->sex;
+    $email = $user->email;
+    $phone = $user->phone;
+    $status = $user->status;
+    if($role == "admin"){
+
+    }else{
+      header("location: /csdcapp");
+    }
+}else{
+  header("location: /csdcapp/login.php");
+}
+?>
 <?php include "{$_SERVER['DOCUMENT_ROOT']}/csdcapp/partials/_head.php";?>
 
 <body class="hold-transition sidebar-mini">
@@ -12,7 +32,13 @@
   <!-- /.navbar -->
 
   <!-- Main Sidebar Container -->
-  <?php include "{$_SERVER['DOCUMENT_ROOT']}/csdcapp/partials/_sidebar.php";?> 
+  <?php 
+ if($role == "admin"){
+  include "{$_SERVER['DOCUMENT_ROOT']}/csdcapp/partials/_admin_sidebar.php";
+ }else if($role == "user"){
+  include "{$_SERVER['DOCUMENT_ROOT']}/csdcapp/partials/_sidebar.php";
+ }
+?>
   <?php include "{$_SERVER['DOCUMENT_ROOT']}/csdcapp/functions/utility.php";?> 
 
   <?php
@@ -30,11 +56,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Update Staff Record</h1>
+            <h1>Update Staff Record </h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="/csdcapp">Home</a></li>
+              <li class="breadcrumb-item"><a href="/csdcapp/staff_list.php">Staff List</a></li>
               <li class="breadcrumb-item active">Update Staff Record</li>
             </ol>
           </div>
@@ -49,8 +76,11 @@
       <div class="row">
           <div class="col-md-12">
             <div class="card card-default">
-              <div class="card-header">
-                <h3 class="card-title">Update Staff Record</h3>
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <h3 class="card-title ">Update Staff Record </h3>
+                <span id="loader" class="d-none "> <div  class="spinner-border spinner-border-sm" role="status">
+  <span class="sr-only">Loading...</span>
+</div> please wait... </span>
               </div>
               <div class="card-body p-3">
                 <form method="post">
@@ -102,6 +132,17 @@
                                 <div class="form-group">
                                   <label for="cs_no">CS Number</label>
                                   <input type="text" class="form-control" id="cs_no" name="cs_no"   placeholder="CS Number" readonly >
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4"> 
+                                <div class="form-group">
+                                  
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4"> 
+                                <div class="form-group">
+                                  <label for="emp_status">Employment Status</label>
+                                  <input type="text" class="form-control" id="emp_status" name="emp_status"   placeholder="Employment Status" readonly >
                                 </div>
                             </div>
   </div>
@@ -183,7 +224,7 @@
                         </div>
                           
                         
-                        <button type="button" class="btn btn-primary" onclick="stepper.next()">Next</button>
+                        <button id="upd_biodata" type="button" class="btn btn-primary" onclick="stepper.next()">Save and Continue</button>
                          
                       
                       </div>
@@ -261,7 +302,7 @@
                           </div>
                           <div class="col-12 col-md-4"> 
                                 <div class="form-group">
-                                  <label for="designation">Present Post</label>
+                                  <label for="designation">Present Post </label>
                                   <input type="text" class="form-control" id="designation" name="designation" placeholder="Present Post" value="" readonly>
                                 </div>
                           </div>
@@ -287,15 +328,16 @@
 
                             <div class="col-12 col-md-4"> 
                                 <div class="form-group">
-                                  <label for="designation">Date of Retirement</label>
+                                  <label for="retirement_date">Date of Retirement</label>
                                   <input type="date" class="form-control" id="retirement_date" name="retirement_date" placeholder="Date of Present Appointment" value="" readonly>
                                 </div>
                           </div>
                            
                         </div>
                         <button type="button" class="btn btn-primary" onclick="stepper.previous()">Previous</button>
-                        <button type="button" class="btn btn-primary" onclick="stepper.next()">Next</button>
+                        <button id="upd_empinfo" type="button" class="btn btn-primary" onclick="stepper.next()">Save and Continue</button>
                       </div>
+
                       <div id="bankinfo" class="content" role="tabpanel" aria-labelledby="bankinfo-trigger">
                         <h4>Salary Bank Information</h4>
                         <div class="row">
@@ -325,7 +367,7 @@
                             </div>
                         </div>
                         <button type="button" class="btn btn-primary" onclick="stepper.previous()">Previous</button>
-                        <button type="button" class="btn btn-primary" onclick="stepper.next()">Next</button>
+                        <button id="upd_bankinfo" type="button" class="btn btn-primary" onclick="stepper.next()">Save and Continue</button>
                       </div>
 
 
@@ -336,7 +378,7 @@
                           <div class="form-group">
                                 <label for="qualification_category">Qualification Category</label>
                                 <select id="qualification_category" name="qualification_category" class="form-control custom-select">
-                                  <option selected disabled>Choose Category</option>
+                                  <option value="" selected disabled>Choose Category</option>
                                   <option value="pry_certificate">Primary School Leaving Certificate</option>
                                   <option value="jss3_certificate">Junior Secondary School Certificate</option>
                                   <option value="sss_certificates">Senior Secondary School Certificate</option>
@@ -357,7 +399,7 @@
                                 </div>
                         </div>
                         <div class="col col-md-2  d-flex align-items-end mb-3">    
-                            <button type="button" onClick="" class="btn btn-primary">Add New</button>
+                            <button id="add_qual" type="button" class="btn btn-primary">Add New</button>
                         </div>
                       </div>
                       <div class="row">
@@ -389,7 +431,7 @@
                           </div>
                       </div>
                         <button type="button" class="btn btn-primary" onclick="stepper.previous()">Previous</button>
-                        <button type="button" class="btn btn-primary" onclick="stepper.next()">Next</button>
+                        <button type="button" class="btn btn-primary" onclick="stepper.next()">Save and Continue</button>
                       </div>
 
                       <div id="capture" class="content" role="tabpanel" aria-labelledby="capture-trigger">
@@ -499,334 +541,539 @@
 <script src="../csdcapp/dist/js/adminlte.min.js"></script>
 
 <!-- load components -->
-<script src="../csdcapp/dist/js/components/mda_list.js"></script>
-<script src="../csdcapp/dist/js/components/lga_list.js"></script>
-<script src="../csdcapp/dist/js/components/cadres.js"></script>
-<script src="../csdcapp/dist/js/components/gradeLevels.js"></script>
-<script src="../csdcapp/dist/js/components/banks.js"></script>
+<script src="http://localhost/apiservice/components/mda_list.js"></script>
+<script src="http://localhost/apiservice/components/lga_list.js"></script>
+<script src="http://localhost/apiservice/components/cadres.js"></script>
+<script src="http://localhost/apiservice/components/gradeLevels.js"></script>
+<script src="http://localhost/apiservice/components/banks.js"></script>
 
+<script >
+$(document).ready(function () {
+  document.getElementById("loader").classList.remove("d-none");
+  var cs_no = "<?php echo  $cs  ?>";
 
-<script type="text/javascript">
-$(document).ready(function(){
+  $.ajax({
+    url: "http://localhost/csdcapp/functions/get_staff_data.php",
+    type: "post",
+    data: { csn: cs_no },
+    dataType: "json",
+    success: function (res) {
+      document.getElementById("loader").classList.add("d-none");
+      console.log(res);
+      let inputCsNo = document.getElementById("cs_no");
+      let empStatus = document.getElementById("emp_status");
+      let inputSurname = document.getElementById("surname");
+      let inputFirstname = document.getElementById("firstname");
+      let inputOthername = document.getElementById("othername");
+      let inputSex = document.getElementById("sex");
+      let inputDateOfBirth = document.getElementById("dob");
+      let inputEmail = document.getElementById("email");
+      let inputPhone = document.getElementById("phone");
+      let inputNokFullname = document.getElementById("nok_fullname");
+      let inputNokPhone = document.getElementById("nok_phone");
+      let inputNokAddress = document.getElementById("nok_address");
+      let inputPresentMdaLga = document.getElementById("present_mda_lga");
+      let inputParentMdaCode = document.getElementById("parent_mda_code");
+      let inputPresentMdaCode = document.getElementById("present_mda_code");
+      let inputCadre = document.getElementById("cadre");
+      let inputLevel = document.getElementById("level");
+      let inputPresentPost = document.getElementById("designation");
+      let inputDateOfFirstAppointment = document.getElementById("dfa");
+      let inputDateOfPresentAppointment = document.getElementById("dpa");
+      let RetirementDate = document.getElementById("retirement_date");
+      let inputSalaryPayPoint = document.getElementById("salary_pay_point");
+      let inputBankName = document.getElementById("bank_name");
+      let inputAccountName = document.getElementById("account_name");
+      let inputAccountNo = document.getElementById("account_no");
+      let inputImagePath = document.getElementById("results");
+      let inputQualificationCategory = document.getElementById(
+        "qualification_category"
+      );
+      let qualificationInfoDesc = document.getElementById("qual_info_desc");
 
-  var cs_no = '<?php echo  $cs  ?>'
-  
+      function isValidTimestamp(_timestamp) {
+        const newTimestamp = new Date(_timestamp).getTime();
+        return isNumeric(newTimestamp);
+      }
+
+      function isNumeric(n) {
+        return !isNaN(parseFloat(n)) && isFinite(n);
+      }
+
+      // process data from db
+      var dob = "";
+      let dobStr = res.dob_y + "-" + res.dob_m + "-" + res.dob_d;
+      if (isValidTimestamp(dobStr)) {
+        dob = new Date(dobStr).toISOString().substring(0, 10);
+      }
+
+      var dateFirstAppointment;
+      let strDateFirstAppointment = res.yfa + "-" + res.mfa + "-" + res.dfa;
+      if (isValidTimestamp(strDateFirstAppointment)) {
+        dateFirstAppointment = new Date(strDateFirstAppointment)
+          .toISOString()
+          .substring(0, 10);
+      }
+
+      var datePresentAppointment = "";
+      let strDatePresentAppointment = res.ypa + "-" + res.mpa + "-" + res.dpa;
+      if (isValidTimestamp(strDatePresentAppointment)) {
+        datePresentAppointment = new Date(strDatePresentAppointment)
+          .toISOString()
+          .substring(0, 10);
+      }
+
+      var dateOfRetirement = "";
+      if (
+        res.retirement_year !== 0 &&
+        res.retirement_month !== 0 &&
+        res.retirement_date !== 0
+      ) {
+        let strRetirementDate =
+          res.retirement_year +
+          "-" +
+          res.retirement_month +
+          "-" +
+          res.retirement_day;
+
+        if (isValidTimestamp(strRetirementDate)) {
+          dateOfRetirement = new Date(strRetirementDate)
+            .toISOString()
+            .substring(0, 10);
+        } else {
+          dateOfRetirement = "";
+        }
+      }
+
+      // updating form record with data
+      inputCsNo.value = res.cs_no;
+      if (res.emp_status === "yes") {
+        empStatus.value = "Active Service";
+      } else if (res.emp_status === "no") {
+        empStatus.value = "Retired";
+      } else {
+        empStatus.value = "";
+      }
+
+      inputSurname.value = res.surname;
+      inputFirstname.value = res.firstname;
+      inputOthername.value = res.othername;
+      inputSex.value = res.sex;
+      inputDateOfBirth.value = dob;
+      inputEmail.value = res.email;
+      inputPhone.value = res.phone;
+      inputNokFullname.value = res.nok_fullname;
+      inputNokPhone.value = res.nok_phone;
+      inputNokAddress.value = res.nok_address;
+      inputPresentMdaLga.value = res.present_mda_lga;
+      inputParentMdaCode.value = res.parent_mda_code;
+      inputPresentMdaCode.value = res.present_mda_code;
+      inputCadre.value = res.cadre;
+      inputLevel.value = res.level;
+      inputPresentPost.value = res.designation;
+      inputDateOfFirstAppointment.value = dateFirstAppointment;
+      inputDateOfPresentAppointment.value = datePresentAppointment;
+      RetirementDate.value = dateOfRetirement;
+      inputSalaryPayPoint.value = res.salary_pay_point;
+      inputBankName.value = res.bank_name;
+      inputAccountName.value = res.account_name;
+      inputAccountNo.value = res.account_no;
+
+      console.log(dob);
+      inputImagePath.innerHTML =
+        '<img src="' + res.photopath + '" class="img-fluid" />';
+
+      // Educational Qualifications
+      // Show Description
+      $("#qualification_category").change(function () {
+        var category = $(this).val();
+        console.log(category);
+        if (category === "pry_certificate") {
+          qualificationInfoDesc.innerHTML =
+            "<i><small>e.g PSLC - 1992</small></i>";
+        } else if (category === "jss3_certificate") {
+          qualificationInfoDesc.innerHTML =
+            "<i><small>e.g JSSC - 1995</small></i>";
+        }
+        if (category === "sss_certificates") {
+          qualificationInfoDesc.innerHTML =
+            "<i><small>e.g SSLC - 1992</small></i>";
+        }
+        if (category === "tertiary_certificates") {
+          qualificationInfoDesc.innerHTML =
+            "<i><small>e.g BSc. Computer Engineering - 2003</small></i>";
+        }
+        if (category === "pg_certificates") {
+          qualificationInfoDesc.innerHTML =
+            "<i><small>Use comma or colon seperator e.g MTech. Computer Science - 2012; PhD. Cyber Sercurity - 2020</small></i>";
+        }
+        if (category === "prof_qual_international") {
+          qualificationInfoDesc.innerHTML =
+            "<i><small>Certification issuing_authority - year e.g Registered Engineer Coren - 2019</small></i>";
+        }
+        if (category === "prof_mem_international") {
+          qualificationInfoDesc.innerHTML =
+            "<i><small>Membership body - Membership numbere.g NCS - 625762</small></i>";
+        }
+        if (category === "prof_qual_others") {
+          qualificationInfoDesc.innerHTML =
+            "<i><small>Certificate Obtained - Year Obtained e.g Certificate of Completion Fashion Design - 2019</small></i>";
+        }
+        if (category === "prof_mem_others") {
+          qualificationInfoDesc.innerHTML =
+            "<i><small>Membership body - Membership Number</small></i>";
+        }
+      });
+
+      let pry = res.pry_certificate;
+      let jss3 = res.jss3_certificate;
+      let sss = res.sss_certificates;
+      let tertiary = res.tertiary_certificates;
+      let pg = res.pg_certificates;
+      let doctoral = res.doctoral_certificates;
+      let prof_qual_int = res.prof_qual_international;
+      let prof_qual_nat = res.prof_qual_national;
+      let prof_mem_int = res.prof_mem_international;
+      let prof_mem_nat = res.prof_mem_national;
+      let artisan_certificate = res.prof_qual_others;
+      let artisan_membership = res.prof_mem_others;
+
+      const qualifications = [];
+
+      // add Primary School Certificates
+      if (pry !== "NA" || pry !== "") {
+        qualifications.push({
+          category: "Primary School Certificate",
+          qualification_obtained: pry,
+        });
+
+        // // search if string contains multiple qualifications
+        // if(pry.includes(',')){
+        //   let pry_qualifications = pry.split(",")
+
+        //   pry_qualifications.map(qual => {
+        //     qualifications.push({
+        //       category: "Primary School Certificate",
+        //       qualification_obtained: qual
+        //     })
+        //   })
+
+        // }else{
+        //   qualifications.push({
+        //     category: "Primary School Certificate",
+        //     qualification_obtained: pry
+        //   })
+        // }
+      }
+
+      // add Junior Secondary Certificate
+      if (jss3 !== "NA" || jss3 !== "") {
+        qualifications.push({
+          category: "Junior Secondary Certificate",
+          qualification_obtained: jss3,
+        });
+      }
+
+      // add Senior Secondary Certificate
+      if (sss !== "NA" || sss !== "") {
+        qualifications.push({
+          category: "Secondary Secondary Certificate",
+          qualification_obtained: sss,
+        });
+      }
+
+      // add Undergraduate Certificate
+      if (tertiary.toString() !== "NA" || tertiary.toString() !== "") {
+        qualifications.push({
+          category: "Undergraduate Certificate",
+          qualification_obtained: tertiary,
+        });
+      }
+
+      // add post graduate Certificate
+      if (pg.toString() !== "NA" || pg.toString() !== "") {
+        qualifications.push({
+          category: "Graduate Certificate",
+          qualification_obtained: pg,
+        });
+      }
+
+      // add post graduate Certificate
+      if (doctoral !== "NA" || doctoral !== "") {
+        qualifications.push({
+          category: "Graduate Certificate",
+          qualification_obtained: doctoral,
+        });
+      }
+
+      // add Professional Certification
+      if (prof_qual_int !== "NA" || prof_qual_int !== "") {
+        qualifications.push({
+          category: "Professional Certification",
+          qualification_obtained: prof_qual_int,
+        });
+      }
+
+      // add Professional Certification
+      if (prof_qual_nat !== "NA" || prof_qual_nat !== "") {
+        qualifications.push({
+          category: "Professional Certification",
+          qualification_obtained: prof_qual_nat,
+        });
+      }
+
+      // add Professional Membership
+      if (prof_mem_int !== "NA" || prof_mem_int !== "") {
+        qualifications.push({
+          category: "Professional Certification",
+          qualification_obtained: prof_mem_int,
+        });
+      }
+
+      // add Professional Membership
+      if (prof_mem_nat !== "NA" || prof_mem_nat !== "") {
+        qualifications.push({
+          category: "Professional Certification",
+          qualification_obtained: prof_mem_nat,
+        });
+      }
+
+      // add Artisan Certificate
+      if (artisan_certificate !== "NA" || artisan_certificate !== "") {
+        qualifications.push({
+          category: "Artisan Certification",
+          qualification_obtained: artisan_certificate,
+        });
+      }
+
+      // add Artisan Membership
+      if (artisan_membership !== "NA" || artisan_membership !== "") {
+        qualifications.push({
+          category: "Artisan Certification",
+          qualification_obtained: artisan_membership,
+        });
+      }
+
+      qualifications.map((qual, key) => {
+        if (qual.qualification_obtained !== "NA") {
+          $("table tbody").append(
+            `<tr><td>#</td><td>${qual.category}</td><td>${qual.qualification_obtained}</td><td><span class='badge bg-info'>Edit</span></td><td><span class='badge bg-danger'>Delete</span></td></tr>`
+          );
+        }
+      });
+
+      console.log(qualifications);
+    },
+    error: function (res) {},
+  });
+
+  $(document).on("click", "#upd_biodata", function () {
+    var cs_no = $("#cs_no").val();
+    var emp_status = $("#emp_status").val();
+    var surname = $("#surname").val();
+    var firstname = $("#firstname").val();
+    var othername = $("#othername").val();
+    var sex = $("#sex").val();
+    var dob = $("#dob").val();
+    var email = $("#email").val();
+    var phone = $("#phone").val();
+    var nok_fullname = $("#nok_fullname").val();
+    var nok_phone = $("#nok_phone").val();
+    var nok_address = $("#nok_address").val();
+
     $.ajax({
-      url: "http://localhost/csdcapp/functions/get_staff_data.php",
-        type: 'post',
-        data: {csn : cs_no},
-        dataType: 'json',
-        success:function(res){
-         
-          console.log(res)
-          let inputCsNo = document.getElementById("cs_no");
-          let inputSurname = document.getElementById("surname");
-          let inputFirstname = document.getElementById("firstname");
-          let inputOthername = document.getElementById("othername");
-          let inputSex = document.getElementById("sex");
-          let inputDateOfBirth = document.getElementById("dob");
-          let inputEmail = document.getElementById("email");
-          let inputPhone = document.getElementById("phone");
-          let inputNokFullname = document.getElementById("nok_fullname");
-          let inputNokPhone = document.getElementById("nok_phone");
-          let inputNokAddress = document.getElementById("nok_address");
-          let inputPresentMdaLga = document.getElementById("present_mda_lga");
-          let inputParentMdaCode = document.getElementById("parent_mda_code");
-          let inputPresentMdaCode = document.getElementById("present_mda_code");
-          let inputCadre = document.getElementById("cadre");
-          let inputLevel = document.getElementById("level");
-          let inputPresentPost = document.getElementById("designation");
-          let inputDateOfFirstAppointment = document.getElementById("dfa");
-          let inputDateOfPresentAppointment = document.getElementById("dpa");
-          let RetirementDate = document.getElementById("retirement_date");
-          let inputSalaryPayPoint = document.getElementById("salary_pay_point");
-          let inputBankName = document.getElementById("bank_name");
-          let inputAccountName = document.getElementById("account_name");
-          let inputAccountNo = document.getElementById("account_no");
-          let inputImagePath = document.getElementById("results");
-          let inputQualificationCategory = document.getElementById("qualification_category");
-          let qualificationInfoDesc = document.getElementById("qual_info_desc");
-          
-          
-
-
-
-          
-          
-
-        function isValidTimestamp(_timestamp) {
-            const newTimestamp = new Date(_timestamp).getTime();
-            return isNumeric(newTimestamp);
-        }
-
-        function isNumeric(n) {
-            return !isNaN(parseFloat(n)) && isFinite(n);
-        }
-        
-           // process data from db
-           var dob = "";
-            let dobStr = res.dob_y+"-"+ res.dob_m + "-" + res.dob_d;
-            if(isValidTimestamp(dobStr)){
-              dob = new Date(dobStr).toISOString()
-        .substring(0, 10);
-            }
-
-            var dateFirstAppointment
-            let strDateFirstAppointment = res.yfa + "-" + res.mfa + "-" + res.dfa;
-            if(isValidTimestamp(strDateFirstAppointment)){
-             dateFirstAppointment = new Date(strDateFirstAppointment).toISOString()
-        .substring(0, 10);
-            }
-            
-            var datePresentAppointment = "";
-            let strDatePresentAppointment = res.ypa + "-" + res.mpa + "-" + res.dpa;
-            if(isValidTimestamp(strDatePresentAppointment)){
-              datePresentAppointment = new Date(strDatePresentAppointment).toISOString()
-        .substring(0, 10);
-            }
-           
-
-        var dateOfRetirement = "";
-        if(res.retirement_year !== 0 && res.retirement_month !== 0 && res.retirement_date !== 0){
-          let strRetirementDate = res.retirement_year + "-" + res.retirement_month + "-" + res.retirement_day;
-
-          if(isValidTimestamp(strRetirementDate)){
-            dateOfRetirement = new Date(strRetirementDate).toISOString()
-        .substring(0, 10);
-          }else{
-            dateOfRetirement = "";
-          }
-            
-        }
-        
-    
-            // updating form record with data
-            inputCsNo.value = res.cs_no;
-            inputSurname.value = res.surname;
-            inputFirstname.value = res.firstname;
-            inputOthername.value = res.othername;
-            inputSex.value = res.sex;
-            inputDateOfBirth.value = dob;
-            inputEmail.value = res.email;
-            inputPhone.value = res.phone;
-            inputNokFullname.value = res.nok_fullname;
-            inputNokPhone.value = res.nok_phone;
-            inputNokAddress.value = res.nok_address;
-            inputPresentMdaLga.value = res.present_mda_lga;
-            inputParentMdaCode.value = res.parent_mda_code;
-            inputPresentMdaCode.value = res.present_mda_code;
-            inputCadre.value = res.cadre;
-            inputLevel.value = res.level;
-            inputPresentPost.value = res.designation;
-            inputDateOfFirstAppointment.value = dateFirstAppointment;
-            inputDateOfPresentAppointment.value = datePresentAppointment;
-            RetirementDate.value = dateOfRetirement;
-            inputSalaryPayPoint.value = res.salary_pay_point;
-            inputBankName.value = res.bank_name;
-            inputAccountName.value = res.account_name;
-            inputAccountNo.value = res.account_no;
-
-            inputImagePath.innerHTML = 
-              '<img src="' + res.photopath + '" class="img-fluid" />';
-
-
-            // Educational Qualifications
-            // Show Description 
-            $("#qualification_category").change(function(){
-              var category = $(this).val();
-              console.log(category);
-              if(category === "pry_certificate" ){
-                
-                qualificationInfoDesc.innerHTML = "<i><small>e.g PSLC - 1992</small></i>"
-              }else if(category === "jss3_certificate" ){
-                qualificationInfoDesc.innerHTML = "<i><small>e.g JSSC - 1995</small></i>"
-              }if(category === "sss_certificates" ){
-                qualificationInfoDesc.innerHTML = "<i><small>e.g SSLC - 1992</small></i>"
-              }if(category === "tertiary_certificates" ){
-                qualificationInfoDesc.innerHTML = "<i><small>e.g BSc. Computer Engineering - 2003</small></i>"
-              }if(category === "pg_certificates" ){
-                qualificationInfoDesc.innerHTML = "<i><small>Use comma or colon seperator e.g MTech. Computer Science - 2012; PhD. Cyber Sercurity - 2020</small></i>"
-              }if(category === "prof_qual_international" ){
-                qualificationInfoDesc.innerHTML = "<i><small>Certification issuing_authority - year e.g Registered Engineer Coren - 2019</small></i>"
-              }if(category === "prof_mem_international" ){
-                qualificationInfoDesc.innerHTML = "<i><small>Membership body - Membership numbere.g NCS - 625762</small></i>"
-              }
-              if(category === "prof_qual_others" ){
-                qualificationInfoDesc.innerHTML = "<i><small>Certificate Obtained - Year Obtained e.g Certificate of Completion Fashion Design - 2019</small></i>"
-              }
-              if(category === "prof_mem_others" ){
-                qualificationInfoDesc.innerHTML = "<i><small>Membership body - Membership Number</small></i>"
-              }
-            })
-
-            
-           
-
-
-
-            let pry = res.pry_certificate;
-            let jss3 = res.jss3_certificate;
-            let sss = res.sss_certificates;
-            let tertiary = res.tertiary_certificates;
-            let pg = res.pg_certificates;
-            let doctoral = res.doctoral_certificates;
-            let prof_qual_int = res.prof_qual_international;
-            let prof_qual_nat = res.prof_qual_national;
-            let prof_mem_int = res.prof_mem_international;
-            let prof_mem_nat = res.prof_mem_national;
-            let artisan_certificate = res.prof_qual_others;
-            let artisan_membership = res.prof_mem_others;
-
-            const qualifications = [];
-
-            // add Primary School Certificates
-            if(pry !== 'NA' || pry !== ''){
-
-              qualifications.push({
-                  category: "Primary School Certificate",
-                  qualification_obtained: pry
-                })
-
-              // // search if string contains multiple qualifications
-              // if(pry.includes(',')){
-              //   let pry_qualifications = pry.split(",")
-
-              //   pry_qualifications.map(qual => {
-              //     qualifications.push({
-              //       category: "Primary School Certificate",
-              //       qualification_obtained: qual
-              //     })
-              //   })
-
-              // }else{
-              //   qualifications.push({
-              //     category: "Primary School Certificate",
-              //     qualification_obtained: pry
-              //   })
-              // }
-            }
-
-            // add Junior Secondary Certificate
-            if(jss3 !== 'NA' || jss3 !== ''){
-
-              qualifications.push({
-                  category: "Junior Secondary Certificate",
-                  qualification_obtained: jss3
-                })
-
-              
-            }
-            
-            
-            // add Senior Secondary Certificate
-            if(sss !== 'NA' || sss !== ''){
-              qualifications.push({
-                  category: "Secondary Secondary Certificate",
-                  qualification_obtained: sss
-                })
-              
-            }
-
-            // add Undergraduate Certificate
-            if(tertiary.toString() !== 'NA' || tertiary.toString() !== ''){
-              
-                qualifications.push({
-                  category: "Undergraduate Certificate",
-                  qualification_obtained: tertiary
-                })
-             
-            }
-
-
-            // add post graduate Certificate
-            if(pg.toString() !== 'NA' || pg.toString() !== '' ){
-
-              qualifications.push({
-                  category: "Graduate Certificate",
-                  qualification_obtained: pg
-                })
-             
-            }
-
-            // add post graduate Certificate
-            if(doctoral !== 'NA' || doctoral !== '' ){
-
-                qualifications.push({
-                  category: "Graduate Certificate",
-                  qualification_obtained: doctoral
-                })
-              
-            }
-
-            // add Professional Certification
-            if(prof_qual_int !== 'NA' || prof_qual_int !== '' ){
-                qualifications.push({
-                  category: "Professional Certification",
-                  qualification_obtained: prof_qual_int
-                })
-            }
-
-            // add Professional Certification
-            if(prof_qual_nat !== 'NA' || prof_qual_nat !== '' ){
-                qualifications.push({
-                  category: "Professional Certification",
-                  qualification_obtained: prof_qual_nat
-                })
-            }
-
-
-             // add Professional Membership
-             if(prof_mem_int !== 'NA' || prof_mem_int !== '' ){
-                qualifications.push({
-                  category: "Professional Certification",
-                  qualification_obtained: prof_mem_int
-                })
-            }
-
-
-            // add Professional Membership
-            if(prof_mem_nat !== 'NA' || prof_mem_nat !== '' ){
-                qualifications.push({
-                  category: "Professional Certification",
-                  qualification_obtained: prof_mem_nat
-                })
-            }
-
-            // add Artisan Certificate
-            if(artisan_certificate !== 'NA' || artisan_certificate !== '' ){
-                qualifications.push({
-                  category: "Artisan Certification",
-                  qualification_obtained: artisan_certificate
-                })
-            }
-
-            // add Artisan Membership
-            if(artisan_membership !== 'NA' || artisan_membership !== '' ){
-                qualifications.push({
-                  category: "Artisan Certification",
-                  qualification_obtained: artisan_membership
-                })
-            }
-
-
-            qualifications.map((qual, key) => {
-              if(qual.qualification_obtained !== 'NA'){
-                $("table tbody").append(`<tr><td>#</td><td>${qual.category}</td><td>${qual.qualification_obtained}</td><td><span class='badge bg-info'>Edit</span></td><td><span class='badge bg-danger'>Delete</span></td></tr>`)
-              }    
-            })
-
-            console.log(qualifications);
-            
+      url: "http://localhost/csdcapp/functions/updateBioData.php",
+      type: "post",
+      data: {
+        upd_biodata: 1,
+        csn: cs_no,
+        emp_status: emp_status,
+        surname: surname,
+        firstname: firstname,
+        othername: othername,
+        sex: sex,
+        dob: dob,
+        email: email,
+        phone: phone,
+        nok_fullname: nok_fullname,
+        nok_phone: nok_phone,
+        nok_address: nok_address,
       },
-      error: function (res) {},
+      dataType: "json",
+      success: function (response) {
+        console.log(response);
+
+        $("#cs_no").val(cs_no);
+        $("#emp_status").val(response.emp_status);
+        $("#surname").val(surname);
+        $("#firstname").val(firstname);
+        $("#othername").val(othername);
+        $("#sex").val(sex);
+        $("#dob").val(dob);
+        $("#email").val(email);
+        $("#phone").val(phone);
+        $("#nok_fullname").val(nok_fullname);
+        $("#nok_phone").val(nok_phone);
+        $("#nok_address").val(nok_address);
+      },
     });
+  });
+
+  $(document).on("click", "#upd_empinfo", function () {
+    var cs_no = $("#cs_no").val();
+    var dob = $("#dob").val();
+    var present_mda_lga = $("#present_mda_lga").val();
+    var parent_mda_code = $("#parent_mda_code").val();
+    var present_mda_code = $("#present_mda_code").val();
+    var salary_pay_point = $("#salary_pay_point").val();
+    var cadre = $("#cadre").val();
+    var level = $("#level").val();
+    var designation = $("#designation").val();
+    var dfa = $("#dfa").val();
+    var dpa = $("#dpa").val();
+    var retirement_date = $("#retirement_date").val();
+
+    $.ajax({
+      url: "http://localhost/csdcapp/functions/updateEmpInfo.php",
+      type: "post",
+      data: {
+        upd_empinfo: 1,
+        csn: cs_no,
+        dob: dob,
+        present_mda_lga: present_mda_lga,
+        parent_mda_code: parent_mda_code,
+        present_mda_code: present_mda_code,
+        salary_pay_point: salary_pay_point,
+        cadre: cadre,
+        level: level,
+        designation: designation,
+        dfa: dfa,
+        dpa: dpa,
+        retirement_date: retirement_date,
+      },
+      dataType: "json",
+      success: function (res) {
+        console.log(res);
+        console.log(res.designation);
+
+        var retirement_date = "";
+        if (res.r_year !== 0 && res.r_month !== 0 && res.r_date !== 0) {
+          let strRetirementDate =
+            res.r_year + "-" + res.r_month + "-" + res.r_day;
+
+          if (isValidTimestamp(strRetirementDate)) {
+            retirement_date = new Date(strRetirementDate)
+              .toISOString()
+              .substring(0, 10);
+          } else {
+            retirement_date = "";
+          }
+        }
+
+        console.log(retirement_date);
+
+        $("#present_mda_lga").val(present_mda_lga);
+        $("#parent_mda_code").val(parent_mda_code);
+        $("#present_mda_code").val(present_mda_code);
+        $("#salary_pay_point").val(salary_pay_point);
+        $("#cadre").val(cadre);
+        $("#level").val(level);
+        $("#dfa").val(dfa);
+        $("#dpa").val(dpa);
+        $("#retirement_date").val(retirement_date);
+      },
+    });
+  });
+
+  $(document).on("click", "#upd_bankinfo", function () {
+    var cs_no = $("#cs_no").val();
+    var bank_name = $("#bank_name").val();
+    var account_name = $("#account_name").val();
+    var account_no = $("#account_no").val();
+
+    $.ajax({
+      url: "http://localhost/csdcapp/functions/updateBankInfo.php",
+      type: "post",
+      data: {
+        upd_bankinfo: 1,
+        csn: cs_no,
+        bank_name: bank_name,
+        account_name: account_name,
+        account_no: account_no,
+      },
+      dataType: "json",
+      success: function (res) {
+        $("#bank_name").val(res.bank_name);
+        $("#account_name").val(res.account_name);
+        $("#account_no").val(res.account_no);
+      },
+    });
+  });
+
+  $(document).on("click", "#add_qual", function () {
+    var qual_category = $("#qualification_category").val();
+    var qual_info = $("#qualification_info").val();
+    $.ajax({
+      url: "http://localhost/csdcapp/functions/updateQualification.php",
+      type: "post",
+      data: {
+        update_qual: 1,
+        csn: cs_no,
+        qual_category: qual_category,
+        qual_info: qual_info,
+      },
+      dataType: "json",
+      success: function (response) {
+        console.log(response);
+
+        let category = "";
+        switch (qual_category) {
+          case "pry_certificate":
+            category = "Primary School Leaving Certificate";
+            break;
+          case "jss3_certificate":
+            category = "Junior Secondary School Certificate";
+            break;
+          case "sss_certificates":
+            category = "Senior Secondary School Certificate";
+            break;
+          case "tertiary_certificates":
+            category = "Undergraduate Certificate";
+            break;
+          case "prof_qual_international":
+            category = "Professional Certification";
+            break;
+          case "prof_mem_international":
+            category = "Professional Membership";
+            break;
+          case "prof_qual_others":
+            category = "Artisan Certification";
+            break;
+          case "prof_mem_others":
+            category = "Artisan Membership";
+            break;
+          default:
+            break;
+        }
+        console.log(response);
+        $("#qualification_category").val("");
+        $("#qualification_info").val("");
+
+        $("table tbody").append(
+          `<tr><td>#</td><td>${category}</td><td>${qual_info}</td><td><span class='badge bg-info'>Edit</span></td><td><span class='badge bg-danger'>Delete</span></td></tr>`
+        );
+      },
+    });
+  });
 });
+
+
 </script>
 
 <!-- Webcam -->
 <script src="../csdcapp/plugins/webcam/webcam.min.js"></script>
 
-<script src="../csdcapp/dist/js/components/webcam.js"></script>
+<script src="http://localhost/apiservice/dist/js/components/webcam.js"></script>
 
 <script>
 // BS-Stepper Init

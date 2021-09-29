@@ -1,6 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <!-- head -->
+<?php session_start(); 
+
+if(isset($_SESSION["userdata"]))
+{
+	  $user = $_SESSION["userdata"];
+
+    $cs_no = $user->username;
+    $role = $user->role;
+    $fullname = $user->fullname;
+    $sex = $user->sex;
+    $email = $user->email;
+    $phone = $user->phone;
+    $status = $user->status;
+}else{
+  header("location: /csdcapp/login.php");
+}
+?>
+
 <?php include "{$_SERVER['DOCUMENT_ROOT']}/csdcapp/partials/_head.php";?>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -11,11 +29,20 @@
   </div>
 
   <!-- top navbar -->
-<?php include "{$_SERVER['DOCUMENT_ROOT']}/csdcapp/partials/_top_navbar.php";?>
+
+<?php 
+include "{$_SERVER['DOCUMENT_ROOT']}/csdcapp/partials/_top_navbar.php";
+?>
 
   <!-- Main Sidebar Container -->
 
-<?php include "{$_SERVER['DOCUMENT_ROOT']}/csdcapp/partials/_sidebar.php";?>
+<?php 
+ if($role == "admin"){
+  include "{$_SERVER['DOCUMENT_ROOT']}/csdcapp/partials/_admin_sidebar.php";
+ }else if($role == "user"){
+  include "{$_SERVER['DOCUMENT_ROOT']}/csdcapp/partials/_sidebar.php";
+ }
+?>
 
 
   <!-- Content Wrapper. Contains page content -->
@@ -29,7 +56,7 @@
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item"><a href="/csdcapp">Home</a></li>
               <li class="breadcrumb-item active">Dashboard</li>
             </ol>
           </div><!-- /.col -->
@@ -45,24 +72,7 @@
         
         <!-- /.row -->
         <!-- Main row -->
-        <div class="row">
      
-          <section class="col-lg-12 ">
-         
-          <div class="card ">
-              <div class="card-header border-0 ">
-                <h3 class="card-title">
-                  Captured and Uncaptured Staff
-                </h3>
-              </div>
-              <div class="card-body">
-                <canvas class="chart" id="donut-chart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
-              </div>
-            </div>
-          </section>
-
-        </div>
-
         <div class="row">
      
           <section class="col-lg-12 ">

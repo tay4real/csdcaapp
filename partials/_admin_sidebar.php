@@ -13,6 +13,7 @@ if(isset($_SESSION["userdata"])){
 
 ?>
 
+
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="index3.html" class="brand-link">
@@ -25,7 +26,7 @@ if(isset($_SESSION["userdata"])){
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="saved_images/<?php echo $cs_no  ?>.jpg" class="img-circle elevation-2" alt="User Image">
+          <img src="saved_images/<?php echo $cs_no  ?>.jpg" class="img-circle elevation-2"  alt="User Image">
         </div>
         <div class="info">
           <a href="#" class="d-block"><?php echo $fullname ?></a>
@@ -66,14 +67,22 @@ if(isset($_SESSION["userdata"])){
               </p>
             </a>
           </li>
-          <!-- <li class="nav-item">
-            <a href="/csdcapp/new_staff.php"   class="nav-link ">
+          <li class="nav-item">
+            <a href="new_staff.php" class="nav-link">
               <i class="nav-icon fas fa-th"></i>
               <p>
                 New Staff Record
               </p>
             </a>
-          </li> -->
+          </li>
+          <li class="nav-item">
+            <a href="mda_list.php" class="nav-link">
+              <i class="nav-icon fas fa-th"></i>
+              <p>
+                MDA List
+              </p>
+            </a>
+          </li>
 
           <!-- <li class="nav-header">Reports</li>
           <li class="nav-item">
@@ -115,6 +124,24 @@ if(isset($_SESSION["userdata"])){
               <i class="nav-icon far fa-image"></i>
               <p>
               Password Reset
+              </p>
+            </a>
+          </li>
+
+          <li class="nav-header">Admin Operation</li>
+          <li class="nav-item">
+            <a href="/csdcapp/system_users.php" class="nav-link">
+              <i class="nav-icon far fa-image"></i>
+              <p>
+              System Users
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="pages/gallery.html" class="nav-link">
+              <i class="nav-icon far fa-image"></i>
+              <p>
+              Users Audit Trail
               </p>
             </a>
           </li>

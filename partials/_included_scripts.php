@@ -27,6 +27,10 @@
 <script src="plugins/summernote/summernote-bs4.min.js"></script>
 <!-- overlayScrollbars -->
 <script src="../csdcapp/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+<!-- SweetAlert2 -->
+<script src="../csdcapp/plugins/sweetalert2/sweetalert2.min.js"></script>
+<!-- Toastr -->
+<script src="../csdcapp/plugins/toastr/toastr.min.js"></script>
 <!-- AdminLTE App -->
 <script src="../csdcapp/dist/js/adminlte.js"></script>
 
